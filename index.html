@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الاختبارات الإلكترونية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --danger-color: #f72585;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 2rem 1rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                padding: 3rem 2rem;
+            }
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-certificate {
+            background-color: var(--success-color);
+        }
+
+        .btn-certificate:hover {
+            background-color: #3aa8d8;
+        }
+
+        .btn-details {
+            background-color: var(--accent-color);
+        }
+
+        .btn-details:hover {
+            background-color: #3a7fc4;
+        }
+
+        .btn-restart {
+            background-color: var(--warning-color);
+        }
+
+        .btn-restart:hover {
+            background-color: #e68a19;
+        }
+
+        .timer-container {
+            background-color: #fff8f0;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .timer {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--danger-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .timer i {
+            margin-left: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2.5rem;
+            font-weight: 700;
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--dark-color);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.2rem;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: var(--accent-color);
+        }
+
+        .option input {
+            width: auto;
+            margin-left: 1rem;
+            transform: scale(1.3);
+        }
+
+        .option label {
+            margin-bottom: 0;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .navigation-buttons .btn {
+            width: auto;
+            flex: 1;
+            padding: 0.8rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.4s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* شهادة الاختبار */
+        .certificate {
+            background-color: #fff;
+            border: 15px solid #f5d742;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .certificate:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="15" fill="rgba(0,0,0,0.05)" transform="rotate(-45)">شهادة تقدير</text></svg>');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .certificate-header {
+            margin-bottom: 2rem;
+        }
+
+        .certificate-title {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .certificate-subtitle {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 2rem;
+        }
+
+        .certificate-body {
+            margin-bottom: 2rem;
+        }
+
+        .certificate-name {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .certificate-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+
+        .certificate-score {
+            font-size: 1.5rem;
+            color: var(--success-color);
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .certificate-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .certificate-signature {
+            display: inline-block;
+            width: 150px;
+            border-top: 1px solid #ccc;
+            padding-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* تفاصيل الإجابات */
+        .answers-details {
+            margin-top: 2rem;
+        }
+
+        .answer-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background-color: #f8f9fa;
+        }
+
+        .answer-item.correct {
+            border-left: 5px solid var(--success-color);
+        }
+
+        .answer-item.incorrect {
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .answer-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-correct {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-incorrect {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--danger-color);
+        }
+
+        .answer-content {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .user-answer {
+            color: var(--danger-color);
+        }
+
+        .correct-answer {
+            color: var(--success-color);
+        }
+
+        /* تأثيرات */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* أيقونات */
+        .icon {
+            margin-left: 0.5rem;
+        }
+
+        /* زر حفظ الصورة */
+        .save-image-btn {
+            background-color: #9c27b0;
+        }
+
+        .save-image-btn:hover {
+            background-color: #7b1fa2;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- مكتبة html2canvas لتحويل العنصر إلى صورة -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- الواجهة الأولى: إدخال البيانات -->
+    <div class="container" id="student-info-screen">
+        <div class="card fade-in">
+            <h1>نظام الاختبارات الإلكترونية</h1>
+            <div class="form-group">
+                <label for="student-name"><i class="fas fa-user icon"></i>اسم الطالب</label>
+                <input type="text" id="student-name" placeholder="أدخل اسمك الكامل" required>
+            </div>
+            <div class="form-group">
+                <label for="grade-level"><i class="fas fa-graduation-cap icon"></i>المرحلة الدراسية</label>
+                <select id="grade-level" required>
+                    <option value="">اختر المرحلة الدراسية</option>
+                    <option value="primary">المرحلة الابتدائية</option>
+                    <option value="intermediate">المرحلة المتوسطة</option>
+                    <option value="secondary">المرحلة الثانوية</option>
+                    <option value="university">المرحلة الجامعية</option>
+                </select>
+            </div>
+            <button class="btn" id="start-test-btn"><i class="fas fa-play icon"></i>بدء الاختبار</button>
+        </div>
+    </div>
+
+    <!-- الواجهة الثانية: أسئلة الاختبار -->
+    <div class="container hidden" id="test-screen">
+        <div class="card fade-in">
+            <div class="timer-container">
+                <div class="timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="timer">15:00</span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+            </div>
+            
+            <div id="questions-container">
+                <!-- سيتم عرض سؤال واحد في كل مرة -->
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="btn" id="prev-btn" disabled><i class="fas fa-arrow-right icon"></i>السابق</button>
+                <button class="btn" id="next-btn"><i class="fas fa-arrow-left icon"></i>التالي</button>
+            </div>
+            
+            <button class="btn" id="submit-test-btn" style="display: none;"><i class="fas fa-paper-plane icon"></i>إرسال الإجابات</button>
+        </div>
+    </div>
+
+    <!-- الواجهة الثالثة: النتائج والخيارات -->
+    <div class="container hidden" id="result-screen">
+        <div class="card fade-in">
+            <h1>نتيجة الاختبار</h1>
+            <p id="result-message">عزيزي <span id="student-name-display" style="font-weight: 700;"></span>، لقد أكملت الاختبار بنجاح.</p>
+            <p id="score-display" style="font-size: 1.5rem; margin: 1.5rem 0;">درجتك: <span id="score" style="font-weight: 700;">0</span>/<span id="total-questions" style="font-weight: 700;">0</span></p>
+            
+            <div class="result-options" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                <button class="btn btn-restart" id="restart-btn"><i class="fas fa-redo icon"></i>إعادة الاختبار</button>
+                <button class="btn btn-details" id="details-btn"><i class="fas fa-info-circle icon"></i>عرض تفاصيل الإجابات</button>
+                <button class="btn btn-certificate" id="certificate-btn"><i class="fas fa-award icon"></i>الحصول على شهادة</button>
+            </div>
+            
+            <div id="answers-details-container" class="answers-details hidden">
+                <!-- تفاصيل الإجابات ستظهر هنا -->
+            </div>
+        </div>
+    </div>
+
+    <!-- شهادة الاختبار -->
+    <div id="certificate-container" class="hidden">
+        <div class="container">
+            <div class="certificate fade-in" id="certificate-content">
+                <div class="certificate-header">
+                    <div class="certificate-title">شهادة تقدير</div>
+                    <div class="certificate-subtitle">تمنح هذه الشهادة تقديراً للجهود المبذولة</div>
+                </div>
+                <div class="certificate-body">
+                    <div class="certificate-name" id="certificate-name">اسم الطالب</div>
+                    <div class="certificate-text">
+                        لقد أكملت بنجاح اختبار المعرفة العامة وحققت نتيجة ممتازة
+                        <br>نشكرك على جهودك ونتمنى لك مزيداً من التقدم والنجاح
+                    </div>
+                    <div class="certificate-score">
+                        الدرجة النهائية: <span id="certificate-score">0</span>/<span id="certificate-total">0</span>
+                    </div>
+                </div>
+                <div class="certificate-footer">
+                    <div class="certificate-signature">التاريخ: <span id="certificate-date"></span></div>
+                    <div class="certificate-signature">مدير النظام</div>
+                </div>
+            </div>
+            <button class="btn save-image-btn" id="save-image-btn" style="margin-top: 2rem;"><i class="fas fa-download icon"></i>حفظ الشهادة كصورة</button>
+            <button class="btn btn-restart" id="back-to-results-btn" style="margin-top: 1rem;"><i class="fas fa-arrow-left icon"></i>العودة إلى النتائج</button>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الأسئلة (يمكن استبدالها بأسئلة حقيقية)
+        const questions = [
+            {
+                question: "ما هي عاصمة المملكة العربية السعودية؟",
+                options: ["جدة", "الرياض", "مكة المكرمة", "الدمام"],
+                correctAnswer: 1,
+                explanation: "الرياض هي العاصمة السياسية والإدارية للمملكة العربية السعودية"
+            },
+            {
+                question: "كم عدد أركان الإسلام؟",
+                options: ["4", "5", "6", "7"],
+                correctAnswer: 1,
+                explanation: "أركان الإسلام خمسة: الشهادتان، إقام الصلاة، إيتاء الزكاة، صوم رمضان، وحج البيت"
+            },
+            {
+                question: "ما هو أطول نهر في العالم؟",
+                options: ["نهر النيل", "نهر الأمازون", "نهر اليانغتسي", "نهر المسيسيبي"],
+                correctAnswer: 1,
+                explanation: "نهر الأمازون هو أطول نهر في العالم بطول حوالي 6,992 كم"
+            },
+            {
+                question: "في أي عام هجري حدثت غزوة بدر؟",
+                options: ["السنة الأولى للهجرة", "السنة الثانية للهجرة", "السنة الثالثة للهجرة", "السنة الرابعة للهجرة"],
+                correctAnswer: 1,
+                explanation: "وقعت غزوة بدر الكبرى في السنة الثانية للهجرة"
+            },
+            {
+                question: "ما هو العنصر الكيميائي الذي رمزه 'O'؟",
+                options: ["الذهب", "الأكسجين", "الأوزون", "الحديد"],
+                correctAnswer: 1,
+                explanation: "O هو رمز عنصر الأكسجين في الجدول الدوري"
+            },
+            {
+                question: "أي من هذه الدول ليس عضواً في الاتحاد الأوروبي؟",
+                options: ["فرنسا", "ألمانيا", "سويسرا", "إيطاليا"],
+                correctAnswer: 2,
+                explanation: "سويسرا ليست عضواً في الاتحاد الأوروبي رغم موقعها الجغرافي في أوروبا"
+            },
+            {
+                question: "ما هو أصغر كوكب في المجموعة الشمسية؟",
+                options: ["الزهرة", "المريخ", "عطارد", "بلوتو"],
+                correctAnswer: 2,
+                explanation: "عطارد هو أصغر كوكب في المجموعة الشمسية وليس بلوتو الذي تم تصنيفه ككوكب قزم"
+            }
+        ];
+
+        // عناصر الواجهة
+        const studentInfoScreen = document.getElementById('student-info-screen');
+        const testScreen = document.getElementById('test-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const certificateContainer = document.getElementById('certificate-container');
+        const startTestBtn = document.getElementById('start-test-btn');
+        const submitTestBtn = document.getElementById('submit-test-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const detailsBtn = document.getElementById('details-btn');
+        const certificateBtn = document.getElementById('certificate-btn');
+        const saveImageBtn = document.getElementById('save-image-btn');
+        const backToResultsBtn = document.getElementById('back-to-results-btn');
+        const timerElement = document.getElementById('timer');
+        const questionsContainer = document.getElementById('questions-container');
+        const progressBar = document.getElementById('progress-bar');
+        const studentNameDisplay = document.getElementById('student-name-display');
+        const scoreDisplay = document.getElementById('score');
+        const totalQuestionsDisplay = document.getElementById('total-questions');
+        const answersDetailsContainer = document.getElementById('answers-details-container');
+        const certificateName = document.getElementById('certificate-name');
+        const certificateScore = document.getElementById('certificate-score');
+        const certificateTotal = document.getElementById('certificate-total');
+        const certificateDate = document.getElementById('certificate-date');
+        const certificateContent = document.getElementById('certificate-content');
+
+        // متغيرات التطبيق
+        let timeLeft = 15 * 60; // 15 دقيقة بالثواني
+        let timerInterval;
+        let studentAnswers = [];
+        let currentQuestionIndex = 0;
+        let studentName = '';
+        let gradeLevel = '';
+
+        // بدء الاختبار
+        startTestBtn.addEventListener('click', () => {
+            studentName = document.getElementById('student-name').value.trim();
+            gradeLevel = document.getElementById('grade-level').value;
+            
+            if (!studentName || !gradeLevel) {
+                alert('الرجاء إدخال اسم الطالب واختيار المرحلة الدراسية');
+                return;
+            }
+            
+            studentInfoScreen.classList.add('hidden');
+            testScreen.classList.remove('hidden');
+            
+            // عرض السؤال الأول
+            displayCurrentQuestion();
+            
+            // بدء المؤقت
+            startTimer();
+        });
+
+        // عرض السؤال الحالي
+        function displayCurrentQuestion() {
+            questionsContainer.innerHTML = '';
+            
+            const question = questions[currentQuestionIndex];
+            
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question-container';
+            
+            const questionNumber = document.createElement('div');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = currentQuestionIndex + 1;
+            questionElement.appendChild(questionNumber);
+            
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+            questionText.textContent = question.question;
+            questionElement.appendChild(questionText);
+            
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
+            
+            question.options.forEach((option, optionIndex) => {
+                const optionId = `question-${currentQuestionIndex}-option-${optionIndex}`;
+                
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.name = `question-${currentQuestionIndex}`;
+                radioInput.id = optionId;
+                radioInput.value = optionIndex;
+                
+                // تحديد الإجابة إذا تم اختيارها مسبقاً
+                if (studentAnswers[currentQuestionIndex]?.selectedAnswer === optionIndex) {
+                    radioInput.checked = true;
+                }
+                
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                label.textContent = option;
+                
+                optionElement.appendChild(radioInput);
+                optionElement.appendChild(label);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            questionElement.appendChild(optionsContainer);
+            questionsContainer.appendChild(questionElement);
+            
+            // تحديث زر التالي والسابق
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.style.display = currentQuestionIndex === questions.length - 1 ? 'none' : 'inline-block';
+            submitTestBtn.style.display = currentQuestionIndex === questions.length - 1 ? 'block' : 'none';
+            
+            // تحديث شريط التقدم
+            updateProgressBar();
+        }
+
+        // تحديث شريط التقدم
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // الانتقال إلى السؤال التالي
+        nextBtn.addEventListener('click', () => {
+            saveAnswer();
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayCurrentQuestion();
+            }
+        });
+
+        // الانتقال إلى السؤال السابق
+        prevBtn.addEventListener('click', () => {
+            saveAnswer();
+            
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayCurrentQuestion();
+            }
+        });
+
+        // حفظ الإجابة الحالية
+        function saveAnswer() {
+            const selectedOption = document.querySelector(`input[name="question-${currentQuestionIndex}"]:checked`);
+            const answer = selectedOption ? parseInt(selectedOption.value) : null;
+            
+            studentAnswers[currentQuestionIndex] = {
+                question: questions[currentQuestionIndex].question,
+                selectedAnswer: answer,
+                correctAnswer: questions[currentQuestionIndex].correctAnswer,
+                isCorrect: answer === questions[currentQuestionIndex].correctAnswer,
+                explanation: questions[currentQuestionIndex].explanation
+            };
+        }
+
+        // بدء المؤقت
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        // تحديث عرض المؤقت
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // تغيير اللون عندما يقل الوقت عن 5 دقائق
+            if (timeLeft <= 5 * 60) {
+                timerElement.style.color = 'var(--danger-color)';
+            }
+        }
+
+        // إرسال الإجابات
+        submitTestBtn.addEventListener('click', submitTest);
+
+        function submitTest() {
+            clearInterval(timerInterval);
+            
+            // حفظ الإجابة الحالية قبل التصحيح
+            saveAnswer();
+            
+            // تعبئة أي أسئلة لم يتم الإجابة عليها
+            for (let i = 0; i < questions.length; i++) {
+                if (!studentAnswers[i]) {
+                    studentAnswers[i] = {
+                        question: questions[i].question,
+                        selectedAnswer: null,
+                        correctAnswer: questions[i].correctAnswer,
+                        isCorrect: false,
+                        explanation: questions[i].explanation
+                    };
+                }
+            }
+            
+            // حساب النتيجة
+            let score = studentAnswers.filter(answer => answer.isCorrect).length;
+            
+            // عرض النتائج
+            testScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            studentNameDisplay.textContent = studentName;
+            scoreDisplay.textContent = score;
+            totalQuestionsDisplay.textContent = questions.length;
+        }
+
+        // إعادة الاختبار
+        restartBtn.addEventListener('click', () => {
+            // إعادة تعيين المتغيرات
+            timeLeft = 15 * 60;
+            currentQuestionIndex = 0;
+            studentAnswers = [];
+            
+            // إعادة تعيين الواجهة
+            resultScreen.classList.add('hidden');
+            certificateContainer.classList.add('hidden');
+            answersDetailsContainer.classList.add('hidden');
+            studentInfoScreen.classList.remove('hidden');
+            
+            // مسح الإجابات السابقة
+            document.getElementById('student-name').value = '';
+            document.getElementById('grade-level').value = '';
+        });
+
+        // عرض تفاصيل الإجابات
+        detailsBtn.addEventListener('click', () => {
+            answersDetailsContainer.innerHTML = '';
+            
+            studentAnswers.forEach((answer, index) => {
+                const answerItem = document.createElement('div');
+                answerItem.className = `answer-item ${answer.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                const status = document.createElement('div');
+                status.className = `answer-status ${answer.isCorrect ? 'status-correct' : 'status-incorrect'}`;
+                status.innerHTML = `<i class="fas ${answer.isCorrect ? 'fa-check' : 'fa-times'}"></i> ${answer.isCorrect ? 'إجابة صحيحة' : 'إجابة خاطئة'}`;
+                answerItem.appendChild(status);
+                
+                const question = document.createElement('div');
+                question.className = 'answer-content';
+                question.textContent = `السؤال: ${answer.question}`;
+                answerItem.appendChild(question);
+                
+                const userAnswer = document.createElement('div');
+                userAnswer.className = 'answer-content';
+                userAnswer.innerHTML = `إجابتك: <span class="user-answer">${answer.selectedAnswer !== null ? questions[index].options[answer.selectedAnswer] : 'لم يتم الإجابة'}</span>`;
+                answerItem.appendChild(userAnswer);
+                
+                const correctAnswer = document.createElement('div');
+                correctAnswer.className = 'answer-content';
+                correctAnswer.innerHTML = `الإجابة الصحيحة: <span class="correct-answer">${questions[index].options[answer.correctAnswer]}</span>`;
+                answerItem.appendChild(correctAnswer);
+                
+                if (answer.explanation) {
+                    const explanation = document.createElement('div');
+                    explanation.className = 'answer-content';
+                    explanation.textContent = `شرح: ${answer.explanation}`;
+                    answerItem.appendChild(explanation);
+                }
+                
+                answersDetailsContainer.appendChild(answerItem);
+            });
+            
+            answersDetailsContainer.classList.remove('hidden');
+        });
+
+        // عرض شهادة الاختبار
+        certificateBtn.addEventListener('click', () => {
+            resultScreen.classList.add('hidden');
+            certificateContainer.classList.remove('hidden');
+            
+            certificateName.textContent = studentName;
+            certificateScore.textContent = scoreDisplay.textContent;
+            certificateTotal.textContent = totalQuestionsDisplay.textContent;
+            
+            // تاريخ اليوم
+            const today = new Date();
+            const dateString = today.toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            certificateDate.textContent = dateString;
+        });
+
+        // حفظ الشهادة كصورة
+        saveImageBtn.addEventListener('click', () => {
+            // استخدام html2canvas لتحويل الشهادة إلى صورة
+            html2canvas(certificateContent, {
+                scale: 2, // زيادة الدقة
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                // إنشاء رابط للتحميل
+                const link = document.createElement('a');
+                link.download = `شهادة_${studentName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error('حدث خطأ أثناء حفظ الصورة:', err);
+                alert('حدث خطأ أثناء حفظ الشهادة كصورة، يرجى المحاولة مرة أخرى');
+            });
+        });
+
+        // العودة إلى النتائج من الشهادة
+        backToResultsBtn.addEventListener('click', () => {
+            certificateContainer.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
